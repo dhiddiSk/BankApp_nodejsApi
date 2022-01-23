@@ -72,6 +72,42 @@ const accountUserNames = function (userAccounts) {
 
 accountUserNames(accounts);
 
+const userAccountBalance = function (transactions) {
+  // total balance of user's account
+
+  const balance = transactions.reduce(function (
+    previous,
+    current,
+    index,
+    array
+  ) {
+    const sum = previous + current;
+
+    return sum;
+  });
+
+  return balance;
+};
+
+const updateUserAccount = function (currentLoggedInUser) {
+  // deposit or withdrawl
+  currentLoggedInUser.movements.forEach(function (transaction, index) {
+    const type = transaction > 0 ? "deposit" : "withdrawal";
+    const htmlElement = `
+     <div class="movements__row">
+     <div class="movements__type movements__type--${type}">${
+      index + 1
+    }${type}</div>
+     <div class="movements__value">${transaction}€</div>
+   </div>
+   `;
+    containerMovements.insertAdjacentHTML("afterbegin", htmlElement);
+  });
+
+  // Update the user balance value
+  labelBalance.textContent = `${userAccountBalance(currentLoggedInUser.movements)}€`;
+};
+
 // Login implementation of the user
 
 btnLogin.addEventListener("click", function (e) {
@@ -81,26 +117,15 @@ btnLogin.addEventListener("click", function (e) {
   );
 
   if (currentLoggedInUser?.pin === Number(inputLoginPin.value)) {
-    console.log("user logged in successfully");
+    //Update the user account with latest transactions data
+    updateUserAccount(currentLoggedInUser);
+
+    // Now user is allowed to view his/her account
+    document.querySelector(".app").style.opacity = 100;
   } else {
-    alert("The entered credentials are invalid");
+    alert("Please enter valid credentials");
   }
 });
-
-// const updateMovementsWithAccount1 = function (transaction) {
-//   // deposit or withdrawl
-//   transaction.forEach(function (trans, index) {
-//     const type = (trans > 0 ? "deposit" : "withdrawal");
-//     const htmlElement = `
-//      <div class="movements__row">
-//      <div class="movements__type movements__type--${type}">${index + 1}${type}</div>
-//      <div class="movements__value">${trans}€</div>
-//    </div>
-//    `;
-//     containerMovements.insertAdjacentHTML('afterbegin', htmlElement);
-//   });
-
-// }
 
 //updateMovementsWithAccount1(account1.movements);
 
