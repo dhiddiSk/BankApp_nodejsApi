@@ -89,6 +89,34 @@ const userAccountBalance = function (transactions) {
   return balance;
 };
 
+// Total deposits
+const totalDeposits = function (transactions) {
+  const balance = transactions.reduce(function (
+    previous,
+    current,
+    index,
+    array
+  ) {
+    return current > 0 ? (previous + current) : previous;
+  },
+  0);
+  return balance;
+};
+
+// Total withdrawls
+const totalWithdrawls = function (transactions) {
+  const balance = transactions.reduce(function (
+    previous,
+    current,
+    index,
+    array
+  ) {
+    return current < 0 ? previous + current : previous;
+  },
+  0);
+  return balance;
+};
+
 const updateUserAccount = function (currentLoggedInUser) {
   // deposit or withdrawl
   currentLoggedInUser.movements.forEach(function (transaction, index) {
@@ -105,11 +133,71 @@ const updateUserAccount = function (currentLoggedInUser) {
   });
 
   // Update the user balance value
-  labelBalance.textContent = `${userAccountBalance(currentLoggedInUser.movements)}€`;
+  labelBalance.textContent = `${userAccountBalance(
+    currentLoggedInUser.movements
+  )}€`;
+
+  labelSumIn.textContent = `${totalDeposits(currentLoggedInUser.movements)}€`;
+  labelSumOut.textContent = `${totalWithdrawls(
+    currentLoggedInUser.movements
+  )}€`;
 };
 
-// Login implementation of the user
+//Transfer money functionality
+const transferMoney = function(){
 
+  // The user is allowed to transfer amount only to the another three accounts
+  // The amount user can transfer must be less than or equal to the total users balance
+  // Then this must update the whole account of this user and the user which is recieving the money
+
+  // In case if there are any issues in transferring the money, then raise the warning message with alerts accordingly
+
+  const transferToAccount = inputTransferTo.value;
+  const transferAmount = inputTransferAmount.value;
+
+  //now update that userAccount with deposit.
+
+  accounts.forEach(function(acc){
+      if(acc.userName === transferToAccount) acc.movements.push(Number(transferAmount));
+  })
+
+  //now update the currentAccount with transfer.
+  currentLoggedInUser.movements.push(-(Number(transferAmount)));
+  updateUserAccount(currentLoggedInUser);
+}
+
+
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+  transferMoney();
+});
+
+
+
+//Request money functionality
+const requestMoney = function(){
+
+  // If the user is requesting money then the user's account must be 
+
+  const loanApprovalValue = inputLoanAmount.value;
+
+  //now update the currentUserAccount with deposit
+
+currentLoggedInUser.movements.push((Number(loanApprovalValue)));
+updateUserAccount(currentLoggedInUser);
+
+}
+
+btnLoan.addEventListener("click", function(e){
+  e.preventDefault();
+  requestMoney();
+
+})
+
+
+
+
+// Login implementation of the user
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
   currentLoggedInUser = accounts.find(
@@ -126,142 +214,3 @@ btnLogin.addEventListener("click", function (e) {
     alert("Please enter valid credentials");
   }
 });
-
-//updateMovementsWithAccount1(account1.movements);
-
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
-
-//const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-// /////////////////////////////////////////////////
-// console.log(movements.join('-'));
-// console.log(movements);
-
-// console.log(movements.reverse());
-// console.log(movements);
-
-// console.log(movements.slice(-2));
-// console.log(movements);
-
-// Challenge 1.
-
-// const checkDogs = function (dogsJulia, dogsKate) {
-
-//   // remove the cat ages from dogsJulia after creating an shallow copy.
-
-//   const dogsJuliaArrayCopy = dogsJulia;
-
-//   // remove the first and last two
-
-//   dogsJuliaArrayCopy.splice(-4, 2);
-//   dogsJuliaArrayCopy.splice(0, 1);
-
-//   const newArray = [...dogsJuliaArrayCopy, ...dogsKate];
-
-//   newArray.forEach(function (element, index, array) {
-
-//     // console.log( element < 3 ? console.log(`Dog number${index+1} is still a puppy`) : console.log(`Dog number${index+1} is an adult, and is${element} years old`));
-
-//   });
-
-// };
-
-// console.log("-----------------------------------------------");
-// checkDogs([3, 4, 2, 12, 7], [4, 1, 15, 8, 3]);
-// console.log("-----------------------------------------------");
-// checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
-
-// const withdrawals = movements.filter(function (mov) {
-//   return mov < 0;
-// });
-
-//console.log(withdrawals);
-
-// const accumulateTotalBalance = movements.reduce(function (acc, cur) {
-
-//   //console.log(`This is accumulator ${acc}, the current value is ${cur}`);
-//   return acc + cur;
-
-// }, 0);
-
-// labelBalance.textContent = `${accumulateTotalBalance}EUR`;
-
-// // find the maximum value of the account1 using the reduce method.
-
-// const maximumValueUsingReduce = movements.reduce(function (acc, cur) {
-
-//   //  console.log(`This is the accumulator${acc} and the cureent is${cur}`);
-
-//   if (acc > cur) return acc;
-//   else return cur;
-// }, movements[0]);
-
-//console.log(maximumValueUsingReduce);
-
-// challenge 2
-// a. calculate the dogs age in human years using the formula. If Dog <= 2, humanAge = 2*dogAge. If dog is > 2 years old, humanAge = 16 + dogAge *4;
-// b. exclude all dogs that are less than 18 human years old(Which is the same as keeping dogs that atleast 18 years old).
-// c. Calculate the average human age of all adult dogs.
-// d. Run the function for both test datasets. Test data 1: [5, 2, 4, 1, 15, 8, 3], Test data2: [16, 6, 10, 5, 6, 1, 4];
-// const calcAverageHumanAge = function(ages){
-//   const humanAges =  ages.map(function(age){
-//     return age = age <= 2 ? 2*age : 16+age*4;
-//   });
-//  // console.log(humanAges);
-//   // now exclude all the dogs that are less than 18 human years old.
-//   const agesAfterFilter = humanAges.filter(function(ages){
-//       return ages >= 18;
-//   })
-//   //console.log(agesAfterFilter);
-//   const averageHumanAge = agesAfterFilter.reduce(function(acc, age){
-//       return (acc + age)/agesAfterFilter.length;
-//   });
-//   //console.log(averageHumanAge);
-
-// };
-// const calcAverageHumanAge = function (ages) {
-//   const humanAges = ages.map(age => age = age <= 2 ? 2 * age : 16 + age * 4)
-//     .filter(ages => ages >= 18)
-//     .reduce((acc, age, index, array) => acc + age / array.length, 0);
-//   console.log(humanAges);
-// };
-// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
-// calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
-
-//summary__value summary__value--in  (This is the summary value)
-
-// const summaryValuesIn = function (mov) {
-
-//   const valuesIn = mov.filter(function (movement) {
-//     return movement > 0;
-//   }).reduce(function (acc, mov) {
-//     return acc + mov;
-//   });
-
-//   labelSumIn.textContent = valuesIn
-
-// }
-
-// summaryValuesIn(movements);
-
-// const summaryValuesOut = function (mov) {
-
-//   const valuesOut = mov.filter(function (movement) {
-//     return movement < 0;
-//   }).reduce(function (acc, mov) {
-//     return acc + mov;
-//   });
-
-//   labelSumOut.textContent = valuesOut;
-
-// }
-
-// summaryValuesOut(movements);
-
-// Implement the login
-
-// So, first of all create the userNames of accounts, then add those userNames to the account and use that accounts object for the login purpose.
