@@ -1,95 +1,98 @@
-'use strict';
+"use strict";
 
-// Accounts Data 
+// Bank Accounts Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: "Jonas Schmedtmann",
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2,
-  pin: 1111
+  pin: 1111,
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: "Jessica Davis",
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
-  pin: 2222
+  pin: 2222,
 };
 
 const account3 = {
-  owner: 'Steven Thomas Williams',
+  owner: "Steven Thomas Williams",
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
-  pin: 3333
+  pin: 3333,
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: "Sarah Smith",
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
-  pin: 4444
+  pin: 4444,
 };
 
 const accounts = [account1, account2, account3, account4];
+let currentLoggedInUser;
 
-// Update the accounts with userNames
+// FE Elements
+const labelWelcome = document.querySelector(".welcome");
+const labelDate = document.querySelector(".date");
+const labelBalance = document.querySelector(".balance__value");
+const labelSumIn = document.querySelector(".summary__value--in");
+const labelSumOut = document.querySelector(".summary__value--out");
+const labelSumInterest = document.querySelector(".summary__value--interest");
+const labelTimer = document.querySelector(".timer");
+
+const containerApp = document.querySelector(".app");
+const containerMovements = document.querySelector(".movements");
+
+const btnLogin = document.querySelector(".login__btn");
+const btnTransfer = document.querySelector(".form__btn--transfer");
+const btnLoan = document.querySelector(".form__btn--loan");
+const btnClose = document.querySelector(".form__btn--close");
+const btnSort = document.querySelector(".btn--sort");
+
+const inputLoginUsername = document.querySelector(".login__input--user");
+const inputLoginPin = document.querySelector(".login__input--pin");
+const inputTransferTo = document.querySelector(".form__input--to");
+const inputTransferAmount = document.querySelector(".form__input--amount");
+const inputLoanAmount = document.querySelector(".form__input--loan-amount");
+const inputCloseUsername = document.querySelector(".form__input--user");
+const inputClosePin = document.querySelector(".form__input--pin");
+
+// Update the accounts Object with userNames
 
 const accountUserNames = function (userAccounts) {
   userAccounts.forEach(function (acc) {
-  const names = acc.owner.split(" ");
-  let theUserName = "";
-    for(const nam of names){
-      theUserName = theUserName.concat(nam[0]);
-    }
-    userAccounts.userName = theUserName;
+    acc.userName = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name[0])
+      .join("");
   });
-}
+};
 
 accountUserNames(accounts);
 
+// Login implementation of the user
 
-// // Elements
-const labelWelcome = document.querySelector('.welcome');
-const labelDate = document.querySelector('.date');
-const labelBalance = document.querySelector('.balance__value');
-const labelSumIn = document.querySelector('.summary__value--in');
-const labelSumOut = document.querySelector('.summary__value--out');
-const labelSumInterest = document.querySelector('.summary__value--interest');
-const labelTimer = document.querySelector('.timer');
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  currentLoggedInUser = accounts.find(
+    (acc) => acc.userName === String(inputLoginUsername.value)
+  );
 
-const containerApp = document.querySelector('.app');
-const containerMovements = document.querySelector('.movements');
-
-const btnLogin = document.querySelector('.login__btn');
-const btnTransfer = document.querySelector('.form__btn--transfer');
-const btnLoan = document.querySelector('.form__btn--loan');
-const btnClose = document.querySelector('.form__btn--close');
-const btnSort = document.querySelector('.btn--sort');
-
-const inputLoginUsername = document.querySelector('.login__input--user');
-const inputLoginPin = document.querySelector('.login__input--pin');
-const inputTransferTo = document.querySelector('.form__input--to');
-const inputTransferAmount = document.querySelector('.form__input--amount');
-const inputLoanAmount = document.querySelector('.form__input--loan-amount');
-const inputCloseUsername = document.querySelector('.form__input--user');
-const inputClosePin = document.querySelector('.form__input--pin');
-
-// Login implementation
-
-btnLogin.addEventListener('click', function(){
-    
+  if (currentLoggedInUser?.pin === Number(inputLoginPin.value)) {
+    console.log("user logged in successfully");
+  } else {
+    alert("The entered credentials are invalid");
+  }
 });
-
-
-
-
-
 
 // const updateMovementsWithAccount1 = function (transaction) {
 //   // deposit or withdrawl
 //   transaction.forEach(function (trans, index) {
 //     const type = (trans > 0 ? "deposit" : "withdrawal");
 //     const htmlElement = `
-//      <div class="movements__row">   
+//      <div class="movements__row">
 //      <div class="movements__type movements__type--${type}">${index + 1}${type}</div>
 //      <div class="movements__value">${trans}€</div>
 //    </div>
@@ -100,7 +103,6 @@ btnLogin.addEventListener('click', function(){
 // }
 
 //updateMovementsWithAccount1(account1.movements);
-
 
 // const currencies = new Map([
 //   ['USD', 'United States dollar'],
@@ -119,8 +121,6 @@ btnLogin.addEventListener('click', function(){
 
 // console.log(movements.slice(-2));
 // console.log(movements);
-
-
 
 // Challenge 1.
 
@@ -143,8 +143,6 @@ btnLogin.addEventListener('click', function(){
 
 //   });
 
-
-
 // };
 
 // console.log("-----------------------------------------------");
@@ -152,13 +150,11 @@ btnLogin.addEventListener('click', function(){
 // console.log("-----------------------------------------------");
 // checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
 
-
 // const withdrawals = movements.filter(function (mov) {
 //   return mov < 0;
 // });
 
 //console.log(withdrawals);
-
 
 // const accumulateTotalBalance = movements.reduce(function (acc, cur) {
 
@@ -168,7 +164,6 @@ btnLogin.addEventListener('click', function(){
 // }, 0);
 
 // labelBalance.textContent = `${accumulateTotalBalance}EUR`;
-
 
 // // find the maximum value of the account1 using the reduce method.
 
@@ -214,7 +209,6 @@ btnLogin.addEventListener('click', function(){
 
 //summary__value summary__value--in  (This is the summary value)
 
-
 // const summaryValuesIn = function (mov) {
 
 //   const valuesIn = mov.filter(function (movement) {
@@ -243,9 +237,6 @@ btnLogin.addEventListener('click', function(){
 
 // summaryValuesOut(movements);
 
-
-
 // Implement the login
 
 // So, first of all create the userNames of accounts, then add those userNames to the account and use that accounts object for the login purpose.
-
