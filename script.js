@@ -31,7 +31,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 let currentLoggedInUser;
-let sortMovements;
+let sortMovementsState;
 // FE Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
@@ -141,7 +141,7 @@ const updateUserAccountMovements = function (
     containerMovements.insertAdjacentHTML("afterbegin", htmlElement);
   });
 
-  // Update the user balance value
+  // Update the user balance values
   labelBalance.textContent = `${userAccountBalance(movs)}€`;
   labelSumIn.textContent = `${totalDeposits(movs)}€`;
   labelSumOut.textContent = `${totalWithdrawls(movs)}€`;
@@ -149,16 +149,16 @@ const updateUserAccountMovements = function (
 
 //Transfer money functionality
 const transferMoney = function () {
-  const transferToAccount = inputTransferTo.value;
-  const transferAmount = inputTransferAmount.value;
-  let reciverAccount = accounts.find(
-    (acc1) => acc1.userName === inputTransferTo.value
+  const reciverAccount = accounts.find(
+    (acc1) =>
+      acc1.userName === inputTransferTo.value &&
+      acc1.userName !== currentLoggedInUser.userName
   );
 
-  if (reciverAccount) {
-    reciverAccount.movements.push(Number(transferAmount));
+  if (reciverAccount && inputTransferAmount.value > 0) {
+    reciverAccount.movements.push(Number(inputTransferAmount.value));
   }
-  currentLoggedInUser.movements.push(-Number(transferAmount));
+  currentLoggedInUser.movements.push(-Number(inputTransferAmount.value));
   updateUserAccountMovements(currentLoggedInUser);
   inputTransferTo.value = "";
   inputTransferAmount.value = "";
@@ -171,10 +171,11 @@ btnTransfer.addEventListener("click", function (e) {
 
 //Request money functionality
 const requestMoney = function () {
-  const loanApprovalValue = inputLoanAmount.value;
-  currentLoggedInUser.movements.push(Number(loanApprovalValue));
-  updateUserAccountMovements(currentLoggedInUser);
-  inputLoanAmount.value = "";
+  if (Number(inputLoanAmount.value) > 0) {
+    currentLoggedInUser.movements.push(Number(inputLoanAmount.value));
+    updateUserAccountMovements(currentLoggedInUser);
+    inputLoanAmount.value = "";
+  }
 };
 
 btnLoan.addEventListener("click", function (e) {
@@ -203,9 +204,9 @@ btnLogin.addEventListener("click", function (e) {
   }
 });
 
-sortMovements = false;
+sortMovementsState = false;
 btnSort.addEventListener("click", function (e) {
   e.preventDefault();
-  updateUserAccountMovements(currentLoggedInUser, !sortMovements);
-  sortMovements = !sortMovements;
+  updateUserAccountMovements(currentLoggedInUser, !sortMovementsState);
+  sortMovementsState = !sortMovementsState;
 });
