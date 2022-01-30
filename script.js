@@ -31,7 +31,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 let currentLoggedInUser;
-
+let sortMovements;
 // FE Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
@@ -97,7 +97,7 @@ const totalDeposits = function (transactions) {
     index,
     array
   ) {
-    return current > 0 ? (previous + current) : previous;
+    return current > 0 ? previous + current : previous;
   },
   0);
   return balance;
@@ -117,9 +117,18 @@ const totalWithdrawls = function (transactions) {
   return balance;
 };
 
-const updateUserAccount = function (currentLoggedInUser) {
+const updateUserAccountMovements = function (
+  currentLoggedInUser,
+  sort = false
+) {
+  containerMovements.innerHTML = "";
+  //sort the movements
+  const movs = sort
+    ? currentLoggedInUser.movements.slice().sort((a, b) => a - b)
+    : currentLoggedInUser.movements;
+
   // deposit or withdrawl
-  currentLoggedInUser.movements.forEach(function (transaction, index) {
+  movs.forEach(function (transaction, index) {
     const type = transaction > 0 ? "deposit" : "withdrawal";
     const htmlElement = `
      <div class="movements__row">
@@ -133,69 +142,45 @@ const updateUserAccount = function (currentLoggedInUser) {
   });
 
   // Update the user balance value
-  labelBalance.textContent = `${userAccountBalance(
-    currentLoggedInUser.movements
-  )}€`;
-
-  labelSumIn.textContent = `${totalDeposits(currentLoggedInUser.movements)}€`;
-  labelSumOut.textContent = `${totalWithdrawls(
-    currentLoggedInUser.movements
-  )}€`;
+  labelBalance.textContent = `${userAccountBalance(movs)}€`;
+  labelSumIn.textContent = `${totalDeposits(movs)}€`;
+  labelSumOut.textContent = `${totalWithdrawls(movs)}€`;
 };
 
 //Transfer money functionality
-const transferMoney = function(){
-
-  // The user is allowed to transfer amount only to the another three accounts
-  // The amount user can transfer must be less than or equal to the total users balance
-  // Then this must update the whole account of this user and the user which is recieving the money
-
-  // In case if there are any issues in transferring the money, then raise the warning message with alerts accordingly
-
+const transferMoney = function () {
   const transferToAccount = inputTransferTo.value;
   const transferAmount = inputTransferAmount.value;
+  let reciverAccount = accounts.find(
+    (acc1) => acc1.userName === inputTransferTo.value
+  );
 
-  //now update that userAccount with deposit.
-
-  accounts.forEach(function(acc){
-      if(acc.userName === transferToAccount) acc.movements.push(Number(transferAmount));
-  })
-
-  //now update the currentAccount with transfer.
-  currentLoggedInUser.movements.push(-(Number(transferAmount)));
-  updateUserAccount(currentLoggedInUser);
-}
-
+  if (reciverAccount) {
+    reciverAccount.movements.push(Number(transferAmount));
+  }
+  currentLoggedInUser.movements.push(-Number(transferAmount));
+  updateUserAccountMovements(currentLoggedInUser);
+  inputTransferTo.value = "";
+  inputTransferAmount.value = "";
+};
 
 btnTransfer.addEventListener("click", function (e) {
   e.preventDefault();
   transferMoney();
 });
 
-
-
 //Request money functionality
-const requestMoney = function(){
-
-  // If the user is requesting money then the user's account must be 
-
+const requestMoney = function () {
   const loanApprovalValue = inputLoanAmount.value;
+  currentLoggedInUser.movements.push(Number(loanApprovalValue));
+  updateUserAccountMovements(currentLoggedInUser);
+  inputLoanAmount.value = "";
+};
 
-  //now update the currentUserAccount with deposit
-
-currentLoggedInUser.movements.push((Number(loanApprovalValue)));
-updateUserAccount(currentLoggedInUser);
-
-}
-
-btnLoan.addEventListener("click", function(e){
+btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
   requestMoney();
-
-})
-
-
-
+});
 
 // Login implementation of the user
 btnLogin.addEventListener("click", function (e) {
@@ -206,11 +191,21 @@ btnLogin.addEventListener("click", function (e) {
 
   if (currentLoggedInUser?.pin === Number(inputLoginPin.value)) {
     //Update the user account with latest transactions data
-    updateUserAccount(currentLoggedInUser);
+    updateUserAccountMovements(currentLoggedInUser);
 
     // Now user is allowed to view his/her account
     document.querySelector(".app").style.opacity = 100;
+
+    inputLoginUsername.value = "";
+    inputLoginPin.value = "";
   } else {
     alert("Please enter valid credentials");
   }
+});
+
+sortMovements = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  updateUserAccountMovements(currentLoggedInUser, !sortMovements);
+  sortMovements = !sortMovements;
 });
