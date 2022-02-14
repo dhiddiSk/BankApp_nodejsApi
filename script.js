@@ -256,6 +256,7 @@ const startLoginTimer = function () {
 
   setTimeout(() => {
     alert("Your logged in time expired");
+    window.location.reload();   
   }, 300000);
 };
 
@@ -269,6 +270,11 @@ btnLogin.addEventListener("click", function (e) {
   if (currentLoggedInUser?.pin === Number(inputLoginPin.value)) {
     //Update the user account with latest transactions data
     updateUserAccountMovements(currentLoggedInUser);
+
+    const loginElement = document.querySelector(".login");
+    const logoutElement = document.createElement("button");
+    logoutElement.innerHTML = '<button id="logout">LOGOUT→</button>';
+    loginElement.replaceWith(logoutElement);
 
     // Now user is allowed to view his/her account
     document.querySelector(".app").style.opacity = 100;
@@ -287,4 +293,12 @@ btnSort.addEventListener("click", function (e) {
   e.preventDefault();
   updateUserAccountMovements(currentLoggedInUser, !sortMovementsState);
   sortMovementsState = !sortMovementsState;
+});
+
+document.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (e.target.id == "logout") {
+    //Do not allow the user to view his/her account
+    window.location.reload();
+  }
 });
