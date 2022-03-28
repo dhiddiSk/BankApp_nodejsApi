@@ -102,6 +102,7 @@ const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 const loginTimer = document.querySelector(".timer");
 
+
 // Update the accounts Object with userNames
 
 const accountUserNames = function (userAccounts) {
@@ -302,3 +303,4 @@ document.addEventListener("click", function (e) {
     window.location.reload();
   }
 });
+
