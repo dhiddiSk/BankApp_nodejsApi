@@ -54,7 +54,6 @@ header.append(message);
 message.style.background = "#808080";
 message.style.width = "100vw";
 message.style.paddingBottom = "15px";
-
 document.querySelector('.btn-close--cookie')
 .addEventListener('click',function(){
   message.remove();
@@ -101,9 +100,36 @@ document.querySelector('.btn-close--cookie')
 
 document.querySelector("nav").addEventListener("click", function(e){
   e.preventDefault();
-  console.log(`This is the taget`+ e.target.classList);
+ // console.log(`This is the taget`+ e.target.classList);
   if(e.target.classList.contains("nav__link")){
      document.querySelector(e.target.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
   }
 
+})
+
+document.querySelector(".operations__tab-container").addEventListener("click", function(e){
+  e.preventDefault();
+   
+  let className = e.target.getAttribute('class');
+  // return when the target element has no elements(i.e. null)
+  if(!className) return;
+  
+  //When one tab is clicked, then remove the tab active status for the remaining button.
+  document.querySelectorAll('.operations__tab').forEach((Element) => {        
+    let className = Element.getAttribute("class").toString();
+    if(className.includes("operations__tab--active")) Element.classList.remove("operations__tab--active");  
+  })
+  
+  //Add the active status to the element which git clicked.
+  e.target.closest('.operations__tab').classList.add("operations__tab--active");
+
+  //Remove the tab active status from the contents.
+  document.querySelectorAll('.operations__content').forEach((Element) => {
+    Element.classList.remove("operations__content--active"); 
+  });
+  
+  //Add the content active status to the element 
+  let contentElement = `.operations__content--${e.target.getAttribute('data-tab')}`;
+  
+  document.querySelector(contentElement).classList.add("operations__content--active");
 })
