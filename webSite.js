@@ -107,6 +107,10 @@ document.querySelector("nav").addEventListener("click", function(e){
 
 })
 
+
+
+// worked on the tabbed component using the event delegation
+
 document.querySelector(".operations__tab-container").addEventListener("click", function(e){
   e.preventDefault();
    
@@ -133,3 +137,25 @@ document.querySelector(".operations__tab-container").addEventListener("click", f
   
   document.querySelector(contentElement).classList.add("operations__content--active");
 })
+
+
+//fade the button after hovering on one of the button in the navigation bar.
+const fadeOutButtonsFunction = function(event, opac) {
+
+  document.querySelector('.nav__links').addEventListener(event, function(e){
+
+    let navItemClass =  e.target;
+    
+    if(!navItemClass) return;
+  
+    const sibilings = e.target.closest('.nav').querySelectorAll('.nav__link');
+  
+    sibilings.forEach((Element) => {
+      if(Element !== navItemClass) Element.style.opacity = opac;
+    });
+  })
+}
+
+
+fadeOutButtonsFunction("mouseover", 0.5);
+fadeOutButtonsFunction("mouseout", 1.0);
