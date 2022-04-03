@@ -170,7 +170,7 @@ const headerElement = document.querySelector(".header");
 let options = {
   root: null,
   threshold: 0,
-  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px}`
+  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
 };
 
 const callBackFunction = function (entries, observer) {
@@ -181,6 +181,44 @@ const callBackFunction = function (entries, observer) {
   else document.querySelector('.nav').classList.remove('sticky');
 }
 
-let observerAPIObject = new IntersectionObserver(callBackFunction, options);
+let observerAPIObjectNav = new IntersectionObserver(callBackFunction, options);
 
-observerAPIObject.observe(headerElement);
+observerAPIObjectNav.observe(headerElement);
+
+const lazyLoadImages = document.querySelectorAll('img[data-src]');
+
+
+
+
+const callBackFunctionForImageLoad = function (entries, observer){
+   
+  const [entry] = entries;
+
+  console.log(entry);
+
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function(){
+    entry.target.classList.remove('lazy-img');
+  });
+ 
+  observer.unobserve(entry.target);
+
+}
+
+let observerApiObjectLazyImg = new IntersectionObserver(callBackFunctionForImageLoad, {
+  root: null,
+  threshold: 0
+})
+
+
+lazyLoadImages.forEach(img => observerApiObjectLazyImg.observe(img));
+
+
+
+
+
+
+
+
+
