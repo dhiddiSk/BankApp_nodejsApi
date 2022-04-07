@@ -97,7 +97,6 @@ document
 
 document.querySelector("nav").addEventListener("click", function (e) {
   e.preventDefault();
-  // console.log(`This is the taget`+ e.target.classList);
   if (e.target.classList.contains("nav__link")) {
     document
       .querySelector(e.target.getAttribute("href"))
@@ -170,55 +169,107 @@ const headerElement = document.querySelector(".header");
 let options = {
   root: null,
   threshold: 0,
-  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
+  rootMargin: `-${
+    document.querySelector(".nav").getBoundingClientRect().height
+  }px`,
 };
 
 const callBackFunction = function (entries, observer) {
- // destructuring of entries first element.
- const [entriesFirstElement] = entries;
- // This condition refers, if the header page viewport is visible or not. If not visible, then add the navigation to that page
- if (!entriesFirstElement.isIntersecting) document.querySelector('.nav').classList.add('sticky'); 
-  else document.querySelector('.nav').classList.remove('sticky');
-}
+  // destructuring of entries first element.
+  const [entriesFirstElement] = entries;
+  // This condition refers, if the header page viewport is visible or not. If not visible, then add the navigation to that page
+  if (!entriesFirstElement.isIntersecting)
+    document.querySelector(".nav").classList.add("sticky");
+  else document.querySelector(".nav").classList.remove("sticky");
+};
 
 let observerAPIObjectNav = new IntersectionObserver(callBackFunction, options);
 
 observerAPIObjectNav.observe(headerElement);
 
-const lazyLoadImages = document.querySelectorAll('img[data-src]');
+const lazyLoadImages = document.querySelectorAll("img[data-src]");
 
-
-
-
-const callBackFunctionForImageLoad = function (entries, observer){
-   
+const callBackFunctionForImageLoad = function (entries, observer) {
   const [entry] = entries;
-
-  console.log(entry);
 
   entry.target.src = entry.target.dataset.src;
 
-  entry.target.addEventListener('load', function(){
-    entry.target.classList.remove('lazy-img');
+  entry.target.addEventListener("load", function () {
+    entry.target.classList.remove("lazy-img");
   });
- 
+
   observer.unobserve(entry.target);
+};
 
-}
+let observerApiObjectLazyImg = new IntersectionObserver(
+  callBackFunctionForImageLoad,
+  {
+    root: null,
+    threshold: 0,
+  }
+);
 
-let observerApiObjectLazyImg = new IntersectionObserver(callBackFunctionForImageLoad, {
-  root: null,
-  threshold: 0
-})
+lazyLoadImages.forEach((img) => observerApiObjectLazyImg.observe(img));
 
+const allSlides = document.querySelectorAll(".slide");
 
-lazyLoadImages.forEach(img => observerApiObjectLazyImg.observe(img));
+allSlides.forEach((s, index) => {
+        s.style.transform = `translateX(${100 * (index)}%)`;
+      });
 
+const maximumSlides = allSlides.length;
 
+let currentSlide = 0;
 
+const callBackFunctionForSlidingsRight = function () {
+  //validate if there are more slides present or not.
+  if (currentSlide === maximumSlides - 1){
+      currentSlide = 0;
+      document.querySelector(".slider__btn--right").style.opacity = 0.5;
+      document.querySelector(".slider__btn--right").style.cursor = "not-allowed";
+     // document.querySelector(".slider__btn--right").disabled = true;
+      //s.style.transform = `translateX(${-100 * (index - currentSlide)}%)`;
+  }else{// if(){
+    currentSlide++;
+    allSlides.forEach((s, index) => {
+      s.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
+    });    
+  }
+};
 
+document
+  .querySelector(".slider__btn--right")
+  .addEventListener("click", function () {  
+    callBackFunctionForSlidingsRight();
+  });
 
+const callBackFunctionForSlidingsLeft = function () {
 
+  if(currentSlide === maximumSlides - 1){
+      currentSlide  = 0;
+      document.querySelector(".slider__btn--left").style.opacity = 0.5;
+      document.querySelector(".slider__btn--left").style.cursor = "not-allowed";
+     // document.querySelector(".slider__btn--left").disabled = true;
+  } else{
+    currentSlide--;
+    allSlides.forEach((s, index) => {
+      s.style.transform = `translateX(${-100 * (index - currentSlide)}%)`;
+    });
+  }
+};
 
+document
+  .querySelector(".slider__btn--left")
+  .addEventListener("click", function () {
+    callBackFunctionForSlidingsLeft();  
+  });
 
+// logic for right click:
 
+// If you find no slides present on the left side then the right button must not draw new slides.
+
+// logic for left click:
+
+// If you find no slides present on the right side then the left button must not draw any new slides.
+
+// Also accordingly change the style translate value of the slide for each click
