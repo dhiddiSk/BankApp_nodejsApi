@@ -1,8 +1,4 @@
 "use strict";
-
-///////////////////////////////////////
-// Modal window
-
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const btnCloseModal = document.querySelector(".btn--close-modal");
@@ -12,6 +8,33 @@ const btnLogin = document.querySelector(".btn--login-app");
 const cookieButton = document.querySelector(".cookie-message");
 const section1 = document.querySelector("#section--1");
 const btnScrollTo = document.querySelector(".btn--scroll-to");
+const slideButtonRight = document.querySelector(".slider__btn--right");
+const slideButtonLeft = document.querySelector(".slider__btn--left");
+const navigation = document.querySelector(".nav");
+const operationTab = document.querySelector(".operations__tab-container");
+const operationContent = document.querySelectorAll(".operations__content");
+const navigationLinks = document.querySelector(".nav__links");
+const headerElement = document.querySelector(".header");
+const lazyLoadImages = document.querySelectorAll("img[data-src]");
+const allSlides = document.querySelectorAll(".slide");
+const maximumSlides = allSlides.length;
+const message = document.createElement("div");
+const tabButtons = document.querySelectorAll(".btn.operations__tab");
+
+
+// Cookies message text
+message.classList.add("cookie-message");
+message.innerHTML =
+  "We make use of cookies for better functionality of the application.<button class='btn btn-close--cookie'>'Yeah Got it'</button>";
+header.append(message);
+const cookiesButton = document.querySelector(".btn-close--cookie");
+
+cookiesButton.addEventListener("click", function () {
+  message.remove();
+  });
+
+
+
 
 const openModal = function (e) {
   e.preventDefault();
@@ -24,8 +47,11 @@ const closeModal = function () {
   overlay.classList.add("hidden");
 };
 
-for (let i = 0; i < btnsOpenModal.length; i++)
-  btnsOpenModal[i].addEventListener("click", openModal);
+
+btnsOpenModal.forEach((Element) => {
+  Element.addEventListener("click", openModal);
+});
+
 
 btnCloseModal.addEventListener("click", closeModal);
 overlay.addEventListener("click", closeModal);
@@ -41,29 +67,14 @@ btnLogin.addEventListener("click", function (e) {
   window.location.replace("app.html");
 });
 
-const message = document.createElement("div");
-message.classList.add("cookie-message");
-// 1. Create an element.
-// 2. Add text to that element and containing an button in it.
-// 3. Then, add event listener to that button, which performs an required action.
-message.innerHTML =
-  "We make use of cookies for better functionality of the application.<button class='btn btn-close--cookie'>'Yeah Got it'</button>";
-header.append(message);
-message.style.background = "#808080";
-message.style.width = "100vw";
-message.style.paddingBottom = "15px";
-//message.style.position = "fixed";
-document
-  .querySelector(".btn-close--cookie")
-  .addEventListener("click", function () {
-    message.remove();
-  });
 
-//practice smooth scrolling
-// btnScrollTo.addEventListener("click", function(e) {
-//   //e.preventDefault();
-//   section1.scrollIntoView({behavior: 'smooth'});
-// })
+
+
+//smooth scrolling to beginning of sections
+btnScrollTo.addEventListener("click", function(e) {
+  //e.preventDefault();
+  section1.scrollIntoView({behavior: 'smooth'});
+});
 
 //practice event propogation.
 
@@ -95,7 +106,7 @@ document
 
 //adding the smooth scrolling here using the event delegation
 
-document.querySelector("nav").addEventListener("click", function (e) {
+navigation.addEventListener("click", function (e) {
   e.preventDefault();
   if (e.target.classList.contains("nav__link")) {
     document
@@ -105,9 +116,7 @@ document.querySelector("nav").addEventListener("click", function (e) {
 });
 
 // worked on the tabbed component using the event delegation
-
-document
-  .querySelector(".operations__tab-container")
+  operationTab
   .addEventListener("click", function (e) {
     e.preventDefault();
 
@@ -116,7 +125,7 @@ document
     if (!className) return;
 
     //When one tab is clicked, then remove the tab active status for the remaining button.
-    document.querySelectorAll(".operations__tab").forEach((Element) => {
+    tabButtons.forEach((Element) => {
       let className = Element.getAttribute("class").toString();
       if (className.includes("operations__tab--active"))
         Element.classList.remove("operations__tab--active");
@@ -128,7 +137,7 @@ document
       .classList.add("operations__tab--active");
 
     //Remove the tab active status from the contents.
-    document.querySelectorAll(".operations__content").forEach((Element) => {
+    operationContent.forEach((Element) => {
       Element.classList.remove("operations__content--active");
     });
 
@@ -144,7 +153,7 @@ document
 
 //fade the button after hovering on one of the button in the navigation bar.
 const fadeOutButtonsFunction = function (event, opac) {
-  document.querySelector(".nav__links").addEventListener(event, function (e) {
+  navigationLinks.addEventListener(event, function (e) {
     let navItemClass = e.target;
 
     if (!navItemClass) return;
@@ -164,13 +173,13 @@ fadeOutButtonsFunction("mouseout", 1.0);
 
 // The top navigation bar must be appeared for every section
 
-const headerElement = document.querySelector(".header");
+
 
 let options = {
   root: null,
   threshold: 0,
   rootMargin: `-${
-    document.querySelector(".nav").getBoundingClientRect().height
+    navigation.getBoundingClientRect().height
   }px`,
 };
 
@@ -179,15 +188,15 @@ const callBackFunction = function (entries, observer) {
   const [entriesFirstElement] = entries;
   // This condition refers, if the header page viewport is visible or not. If not visible, then add the navigation to that page
   if (!entriesFirstElement.isIntersecting)
-    document.querySelector(".nav").classList.add("sticky");
-  else document.querySelector(".nav").classList.remove("sticky");
+  navigation.classList.add("sticky");
+  else navigation.classList.remove("sticky");
 };
 
 let observerAPIObjectNav = new IntersectionObserver(callBackFunction, options);
 
 observerAPIObjectNav.observe(headerElement);
 
-const lazyLoadImages = document.querySelectorAll("img[data-src]");
+
 
 const callBackFunctionForImageLoad = function (entries, observer) {
   const [entry] = entries;
@@ -211,13 +220,14 @@ let observerApiObjectLazyImg = new IntersectionObserver(
 
 lazyLoadImages.forEach((img) => observerApiObjectLazyImg.observe(img));
 
-const allSlides = document.querySelectorAll(".slide");
+
 
 allSlides.forEach((s, index) => {
         s.style.transform = `translateX(${100 * (index)}%)`;
+        s.setAttribute("slideNumber", index);
       });
 
-const maximumSlides = allSlides.length;
+
 
 let currentSlide = 0;
 
@@ -225,51 +235,30 @@ const callBackFunctionForSlidingsRight = function () {
   //validate if there are more slides present or not.
   if (currentSlide === maximumSlides - 1){
       currentSlide = 0;
-      document.querySelector(".slider__btn--right").style.opacity = 0.5;
-      document.querySelector(".slider__btn--right").style.cursor = "not-allowed";
-     // document.querySelector(".slider__btn--right").disabled = true;
-      //s.style.transform = `translateX(${-100 * (index - currentSlide)}%)`;
-  }else{// if(){
-    currentSlide++;
-    allSlides.forEach((s, index) => {
-      s.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
-    });    
+  }else{
+    currentSlide++;  
   }
+  allSlides.forEach((s, index) => {
+    s.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
+  });  
 };
 
-document
-  .querySelector(".slider__btn--right")
-  .addEventListener("click", function () {  
+slideButtonRight.addEventListener("click", function () {  
     callBackFunctionForSlidingsRight();
   });
 
 const callBackFunctionForSlidingsLeft = function () {
 
-  if(currentSlide === maximumSlides - 1){
-      currentSlide  = 0;
-      document.querySelector(".slider__btn--left").style.opacity = 0.5;
-      document.querySelector(".slider__btn--left").style.cursor = "not-allowed";
-     // document.querySelector(".slider__btn--left").disabled = true;
+  if(currentSlide === 0){
+      currentSlide  = maximumSlides - 1;
   } else{
     currentSlide--;
-    allSlides.forEach((s, index) => {
-      s.style.transform = `translateX(${-100 * (index - currentSlide)}%)`;
-    });
   }
+  allSlides.forEach((s, index) => {
+    s.style.transform = `translateX(${-100 * (index - currentSlide)}%)`;
+  });
 };
 
-document
-  .querySelector(".slider__btn--left")
-  .addEventListener("click", function () {
+slideButtonLeft.addEventListener("click", function () {
     callBackFunctionForSlidingsLeft();  
   });
-
-// logic for right click:
-
-// If you find no slides present on the left side then the right button must not draw new slides.
-
-// logic for left click:
-
-// If you find no slides present on the right side then the left button must not draw any new slides.
-
-// Also accordingly change the style translate value of the slide for each click

@@ -10,7 +10,7 @@
     --color-primary-opacity: #5ec5763a;
     --color-secondary-opacity: #ffcd0331;
     --color-tertiary-opacity: #ff58602d;
-    --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
+    --gradient-primary: linear-gradient(to top left, #bec7c3, #41423f);
     --gradient-secondary: linear-gradient(to top left, #ffb003, #ffcb03);
   }
   
@@ -378,9 +378,7 @@
     height: 50rem;
     margin: 0 auto;
     position: relative;
-  
-    /* IN THE END */
-   overflow: hidden;
+    overflow: hidden;
   }
   
   .slide {
@@ -666,10 +664,10 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 100%;
-    background-color: white;
+    width: 100vw;
+    background-color: "#808080";
     color: #bbb;
     font-size: 1.5rem;
     font-weight: 400;
+    padding-bottom: "15px";
   }
-  
