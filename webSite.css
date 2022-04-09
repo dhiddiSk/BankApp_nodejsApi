@@ -665,8 +665,8 @@
     align-items: center;
     justify-content: space-evenly;
     width: 100vw;
-    background-color: "#808080";
-    color: #bbb;
+    background-color: rgb(32, 32, 32);
+    color: rgb(235, 221, 221);
     font-size: 1.5rem;
     font-weight: 400;
     padding-bottom: "15px";

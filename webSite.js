@@ -22,7 +22,7 @@ const message = document.createElement("div");
 const tabButtons = document.querySelectorAll(".btn.operations__tab");
 
 
-// Cookies message text
+// Cookies message
 message.classList.add("cookie-message");
 message.innerHTML =
   "We make use of cookies for better functionality of the application.<button class='btn btn-close--cookie'>'Yeah Got it'</button>";
@@ -35,7 +35,7 @@ cookiesButton.addEventListener("click", function () {
 
 
 
-
+//open or close modals
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove("hidden");
