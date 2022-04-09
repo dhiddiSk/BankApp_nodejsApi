@@ -71,33 +71,6 @@ learnMorebtn.addEventListener("click", function (e) {
   section1.scrollIntoView({ behavior: "smooth" });
 });
 
-//practice event propogation.
-
-// const navBarElement = document.querySelector(".nav");
-// const navBarChildElement = document.querySelector(".nav__link");
-// const grayColor = "#DCDCDC";
-// const blueColor = "#0000ff";
-
-// navBarChildElement.addEventListener("click", function(){
-//   console.log("The child button got clicked");
-//   this.style.background = grayColor;
-// })
-
-// navBarElement.addEventListener("click", function(){
-//   console.log("The parrent button got clicked");
-//   this.style.background = blueColor;
-// })
-
-//added the smooth scrolling here using the element ID's
-// document.querySelectorAll(".nav__link").forEach((function(element){
-
-//   element.addEventListener('click', function(e){
-//     e.preventDefault();
-//     const hrefID = this.getAttribute('href');
-//     document.querySelector(hrefID).scrollIntoView({behavior: 'smooth'});
-//   })
-// })
-// )
 
 //navigation buttons functionalities
 navigation.addEventListener("click", function (e) {
