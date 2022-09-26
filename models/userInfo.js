@@ -28,24 +28,28 @@ const userRegisterSchema = new Schema({
 });
 
 const userBankAccountSchema = new Schema({
-
-    accountNumber,
-    accountType,
-    currentAmount  
-    
+    accountNumber: {
+      type: Number,
+      required: true
+    }, 
+    accountType: {
+      type: String,
+      default: "savings"
+    }, 
+    currentAmount: {
+      type: Number,
+      default: 0
+    }
 });
 
 
 const userTransactionsSchema = new Schema({
-    transactions
+    transactions : {
+      sending : [0],
+      recieving: [0]
+    }
 });
 
-
-
-
-
-
-
-const UserReg = mongoose.model("newUserReg", userRegisterSchema);
+const userReg = mongoose.model("newUserReg", userRegisterSchema);
 
 export default UserReg;
