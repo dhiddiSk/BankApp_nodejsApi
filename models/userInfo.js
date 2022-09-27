@@ -42,7 +42,6 @@ const userBankAccountSchema = new Schema({
     }
 });
 
-
 const userTransactionsSchema = new Schema({
     transactions : {
       sending : [0],
