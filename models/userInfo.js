@@ -55,4 +55,4 @@ const userRegisterSchema = new Schema({
 
 const userReg = mongoose.model("usersBankData", userRegisterSchema);
 
-export default userReg;
+module.exports = userReg;
