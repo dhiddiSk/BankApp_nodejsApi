@@ -1,13 +1,17 @@
-import newUserReg from "../models/userInfo.js";
-import express from "express";
-import bycrypt from "bcryptjs";
-import jsonwt from "jsonwebtoken";
-
 const express = require('express');
+const userReg = require('../models/userInfo.js');
+const bycrypt = require('bcryptjs');
+const jsonwt = require('jsonwebtoken');
+const secret = require('../setup/constants.js');
 const app = express();
 
-const registration = async function (req, res) {
-    const newUser = new newUserReg({
+const jwtTokenGeneration = function (payload) {
+  const token = jsonwt.sign(payload, secret, { expiresIn: 3600 });
+  return token;
+};
+
+const userRegistration = async function (req, res) {
+    const newUser = new userReg({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
@@ -33,7 +37,7 @@ const registration = async function (req, res) {
 
 //new user registration.
 app.post('/register', function(req, res, next){
-    registration(req, res);
+  userRegistration(req, res);
 });
 
 //user login.
