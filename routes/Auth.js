@@ -5,7 +5,7 @@ const jsonwt = require('jsonwebtoken');
 const secret = require('../setup/constants.js');
 const app = express();
 
-const jwtTokenGeneration = function (payload) {
+const jwtTokenGen = function (payload) {
   const token = jsonwt.sign(payload, secret, { expiresIn: 3600 });
   return token;
 };
@@ -28,7 +28,7 @@ const userRegistration = async function (req, res) {
       email: userSignup.email,
     };
   
-    const jwtToken = await jwtTokenGeneration(payloadForJwt);
+    const jwtToken = await jwtTokenGen(payloadForJwt);
     res.status(200).json({
       success: true,
       token: jwtToken,
