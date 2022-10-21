@@ -1,37 +1,42 @@
+const UserReg = require('../models/userInfo.js')
+const bcrypt = require('bcryptjs')
+const jsonwt = require('jsonwebtoken')
+const secret = require('../setup/constants.js')
+
 const jwtTokenGen = function (payload) {
-  const token = jsonwt.sign(payload, secret, { expiresIn: 3600 });
-  return token;
-};
+  const token = jsonwt.sign(payload, secret, { expiresIn: 3600 })
+  return token
+}
 
 const userRegistration = async function (req, res) {
-  const newUser = new userReg({
+  const newUser = new UserReg({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    userName: req.body.userName,
-  });
-  const salt = await bcrypt.genSalt(10);
-  const hashpassword = await bcrypt.hash(newUser.password, salt);
-  newUser.password = hashpassword;
-  const userSignup = await newUser.save();
+    userName: req.body.userName
+  })
+  const salt = await bcrypt.genSalt(10)
+  const hashpassword = await bcrypt.hash(newUser.password, salt)
+  newUser.password = hashpassword
+  const userSignup = await newUser.save()
 
   const payloadForJwt = {
     id: userSignup.id,
     name: userSignup.name,
-    email: userSignup.email,
-  };
+    email: userSignup.email
+  }
 
-  const jwtToken = await jwtTokenGen(payloadForJwt);
+  const jwtToken = await jwtTokenGen(payloadForJwt)
   res.status(200).json({
     success: true,
-    token: jwtToken,
-  });
-};
+    token: jwtToken
+  })
+}
 
 const login = function (req, res) {
-  const password = req.body.password;
-  const email = req.body.email;
-  userReg
+  const password = req.body.password
+  const email = req.body.email
+  UserReg
     .findOne({ email })
     .then((user) => {
       if (user) {
@@ -39,31 +44,31 @@ const login = function (req, res) {
           .compare(password, user.password)
           .then((correctPassword) => {
             if (!correctPassword) {
-              return res.status(401).json({ message: "User login failure" });
+              return res.status(401).json({ message: 'User login failure' })
             }
 
             const payload = {
               id: user.id,
               name: user.name,
-              email: user.email,
-            };
+              email: user.email
+            }
 
             // Generate jwt token and send it back to client
-            jsonwt.sign(payload, secret, { expiresIn: 3600 }, (err, token) => {
+            jsonwt.sign(payload, secret, { expiresIn: 3600 }, (_err, token) => {
               res.json({
                 success: true,
-                token: token,
-              });
-            });
+                token
+              })
+            })
           })
           .catch((error) => {
-            console.log(`Error with passwords: ${error}`);
-          });
+            console.log(`Error with passwords: ${error}`)
+          })
       } else {
-        return res.status(404).json({ message: "Email doesn't exists" });
+        return res.status(404).json({ message: "Email doesn't exists" })
       }
     })
     .catch((error) => {
-      console.log(`Error while login: ${error}`);
-    });
-};
+      console.log(`Error while login: ${error}`)
+    })
+}

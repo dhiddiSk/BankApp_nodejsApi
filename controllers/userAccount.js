@@ -1,6 +1,6 @@
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
-const userAccountNumberGeneration = function(){
-    let userAccounUUID = uuidv4();
-    return  userAccounUUID;
+const userAccountNumberGeneration = function () {
+  const userAccounUUID = uuidv4()
+  return userAccounUUID
 }
