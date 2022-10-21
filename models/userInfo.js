@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 // As per the requirement of the project, it is understood that embedded data model is most suitable for this project
 
@@ -27,21 +27,21 @@ const userRegisterSchema = new Schema({
     date: {
       type: Date,
       default: Date.now
-    },
+    }
   },
   userBankData: {
     accountNumber: {
       type: String,
-      default: "XXXX"
+      default: 'XXXX'
     },
     accountType: {
       type: String,
-      default: "savings"
+      default: 'savings'
     },
     currentAmount: {
       type: Number,
       default: 0
-    },
+    }
   },
   transactions: {
     sent: [{
@@ -50,9 +50,9 @@ const userRegisterSchema = new Schema({
     recieved: [{
       type: Number
     }]
-  },
-});
+  }
+})
 
-const userReg = mongoose.model("usersBankData", userRegisterSchema);
+const UserReg = mongoose.model('usersBankData', userRegisterSchema)
 
-module.exports = userReg;
+module.exports = UserReg
