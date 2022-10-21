@@ -1,10 +1,3 @@
-const express = require("express");
-const userReg = require("../models/userInfo.js");
-const bcrypt = require("bcryptjs");
-const jsonwt = require("jsonwebtoken");
-const secret = require("../setup/constants.js");
-const app = express();
-
 const jwtTokenGen = function (payload) {
   const token = jsonwt.sign(payload, secret, { expiresIn: 3600 });
   return token;
@@ -34,11 +27,6 @@ const userRegistration = async function (req, res) {
     token: jwtToken,
   });
 };
-
-/*
- Here, the logic goes is to check first of all if the email exists in the database. If exists,
- then check for the compatability of the password.
-*/
 
 const login = function (req, res) {
   const password = req.body.password;
@@ -79,11 +67,3 @@ const login = function (req, res) {
       console.log(`Error while login: ${error}`);
     });
 };
-
-//user transactions.
-app.get("/transactions", function (req, res, next) {});
-
-//user profile
-app.get("/profile", function (req, res, next) {});
-
-export { userRegistration, login };
