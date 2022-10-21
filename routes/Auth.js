@@ -102,3 +102,5 @@ app.get('/transactions', function(req, res, next){
 app.get('/profile', function(req, res, next){
 
 });
+
+exports.module = Auth.js;
