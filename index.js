@@ -1,6 +1,7 @@
 const express = require('express')
 const auth = require('./routes/Auth.js')
 const app = express()
+const port = 3000
 
 app.get('/', function (req, res) {
   res.json("Hello, Welcome to Sai's bank")
@@ -23,3 +24,5 @@ app.post('/auth/login', function (req, res, next) {
 app.get('/home', function (req, res, next) {
 
 })
+
+app.listen(port)
