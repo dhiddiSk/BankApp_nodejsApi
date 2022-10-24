@@ -1,7 +1,7 @@
-const UserReg = require('../models/userInfo.js')
-const bcrypt = require('bcryptjs')
-const jsonwt = require('jsonwebtoken')
-const secret = require('../setup/constants.js')
+import * as secret from '../setup/constants.js'
+import * as UserReg from '../models/userInfo.js'
+import * as bcrypt from 'bcryptjs'
+import * as jsonwt from 'jsonwebtoken'
 
 const jwtTokenGen = function (payload) {
   const token = jsonwt.sign(payload, secret, { expiresIn: 3600 })
@@ -72,3 +72,5 @@ const login = function (req, res) {
       console.log(`Error while login: ${error}`)
     })
 }
+
+export { userRegistration, login }

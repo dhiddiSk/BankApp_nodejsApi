@@ -4,3 +4,5 @@ const userAccountNumberGeneration = function () {
   const userAccounUUID = uuidv4()
   return userAccounUUID
 }
+
+export { userAccountNumberGeneration }
