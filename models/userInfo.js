@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import * as mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 // As per the requirement of the project, it is understood that embedded data model is most suitable for this project
@@ -55,4 +55,4 @@ const userRegisterSchema = new Schema({
 
 const UserReg = mongoose.model('usersBankData', userRegisterSchema)
 
-module.exports = UserReg
+export { UserReg }

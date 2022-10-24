@@ -25,4 +25,6 @@ app.get('/home', function (req, res, next) {
 
 })
 
-app.listen(port)
+app.listen(port, () => {
+  console.log(`App is listening at port number ${port}`)
+})
