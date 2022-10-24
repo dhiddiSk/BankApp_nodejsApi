@@ -1,7 +1,8 @@
-const express = require('express')
-const auth = require('./routes/Auth.js')
+import * as express from 'express'
+import * as auth from './controllers/userAuth.js'
+import { applicationPortNumber } from './setup/constants.js'
+
 const app = express()
-const port = 3000
 
 app.get('/', function (req, res) {
   res.json("Hello, Welcome to Sai's bank")
@@ -25,6 +26,6 @@ app.get('/home', function (req, res, next) {
 
 })
 
-app.listen(port, () => {
-  console.log(`App is listening at port number ${port}`)
+app.listen(applicationPortNumber, () => {
+  console.log(`App is listening at port number ${applicationPortNumber}`)
 })
