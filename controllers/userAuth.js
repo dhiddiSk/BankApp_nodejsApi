@@ -33,7 +33,7 @@ const userRegistration = async function (req, res) {
   })
 }
 
-const login = function (req, res) {
+const userLogin = function (req, res) {
   const password = req.body.password
   const email = req.body.email
   UserReg
@@ -69,8 +69,8 @@ const login = function (req, res) {
       }
     })
     .catch((error) => {
-      console.log(`Error while login: ${error}`)
+      console.log(`Error while userLogin: ${error}`)
     })
 }
 
-export { userRegistration, login }
+export { userRegistration, userLogin }

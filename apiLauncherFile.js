@@ -13,7 +13,6 @@ app.post('/auth/register', function (req, res, next) {
   auth.userRegistration(req, res)
 })
 
-// user login
 // @type    POST
 // @route    /api/auth/login
 // @desc    route for login of registered users
