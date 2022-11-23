@@ -1,15 +1,15 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
-// As per the requirement of the project, it is understood that embedded data model is most suitable for this project
-
-// Basic schema for the user registration
+/*
+As per the requirement of the project, it is understood that embedded data modelling is most suitable for this project. 
+*/
 const userRegisterSchema = new Schema({
   userRegisterData: {
     name: {
       type: String,
       required: true,
-      maxLength: 50
+      maxLength: 100
     },
     email: {
       type: String,
