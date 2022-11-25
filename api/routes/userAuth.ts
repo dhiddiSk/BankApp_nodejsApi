@@ -1,5 +1,6 @@
 import { UserReg } from '../models/userInfo'
 import * as bcrypt from 'bcrypt'
+import { jwtTokenGen } from  '../controllers/jwtTokenGenerator'
 
 const userRegistration = async function (req, res) {
   const newUser = new UserReg({
