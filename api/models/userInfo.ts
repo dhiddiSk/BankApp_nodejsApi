@@ -4,7 +4,55 @@ const Schema = mongoose.Schema
 /*
 As per the requirement of the project, it is understood that embedded data modelling is most suitable for this project. 
 */
-const userRegisterSchema = new Schema({
+
+export interface UserDoc extends Document {
+        userRegisterData:{
+        name: {
+          type: string;
+          required: boolean;
+        };
+        email: {
+          type: string;
+          required: boolean;
+        };
+        password: {
+          type: string;
+          required: boolean;
+        };
+        userName: {
+          type: string;
+        };
+        date: {
+          type: Date
+        }
+      },
+      userBankData: {
+        accountNumber: {
+          type: String,
+          default: 'XXXX'
+        },
+        accountType: {
+          type: String,
+          default: 'savings'
+        },
+        currentAmount: {
+          type: Number,
+          default: 0
+        }
+      },
+      transactions: {
+        sent: [{
+          type: Number
+        }],
+        recieved: [{
+          type: Number
+        }]
+      }
+
+}
+
+
+const userRegisterSchema = new Schema<UserDoc>({
   userRegisterData: {
     name: {
       type: String,
