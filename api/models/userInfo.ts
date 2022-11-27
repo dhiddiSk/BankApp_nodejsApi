@@ -1,58 +1,31 @@
-import mongoose from 'mongoose'
-const Schema = mongoose.Schema
+import { Schema, model, connect } from 'mongoose';
+
 
 /*
 As per the requirement of the project, it is understood that embedded data modelling is most suitable for this project. 
 */
 
-export interface UserDoc extends Document {
+interface userRegistrationDoc{
         userRegisterData:{
-        name: {
-          type: string;
-          required: boolean;
-        };
-        email: {
-          type: string;
-          required: boolean;
-        };
-        password: {
-          type: string;
-          required: boolean;
-        };
-        userName: {
-          type: string;
-        };
-        date: {
-          type: Date
-        }
+        name: string,
+        email: string,
+        password: string,
+        userName: string,
+        date: Date
       },
       userBankData: {
-        accountNumber: {
-          type: String,
-          default: 'XXXX'
-        },
-        accountType: {
-          type: String,
-          default: 'savings'
-        },
-        currentAmount: {
-          type: Number,
-          default: 0
-        }
+        accountNumber: string,
+        accountType: string,
+        currentAmount: Number
       },
       transactions: {
-        sent: [{
-          type: Number
-        }],
-        recieved: [{
-          type: Number
-        }]
+        sent: [Number],
+        recieved: [Number]
       }
-
 }
 
 
-const userRegisterSchema = new Schema<UserDoc>({
+const userRegisterSchema = new Schema<userRegistrationDoc>({
   userRegisterData: {
     name: {
       type: String,
@@ -101,6 +74,6 @@ const userRegisterSchema = new Schema<UserDoc>({
   }
 })
 
-const UserReg = mongoose.model('usersBankData', userRegisterSchema)
+const UserReg = model<userRegistrationDoc>('usersBankData', userRegisterSchema)
 
 export { UserReg }

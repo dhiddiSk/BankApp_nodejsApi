@@ -4,20 +4,31 @@ import { jwtTokenGen } from  '../controllers/jwtTokenGenerator'
 
 const userRegistration = async function (req, res) {
   const newUser = new UserReg({
+    userRegisterData:{
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     userName: req.body.userName
+    },
+    userBankData:{
+      accountNumber: req.body.accountNumber,
+      accountType: req.body.accountType,
+      currentAmount: req.body.currentAmount
+    },
+    transactions:{
+      sent: req.body.sent,
+      recieved: req.body.recieved
+    }
   })
   const salt = await bcrypt.genSalt(10)
-  const hashpassword = await bcrypt.hash(newUser.password, salt)
-  newUser.password = hashpassword
+  const hashpassword = await bcrypt.hash(newUser['userRegisterData'].password, salt)
+  newUser['userRegisterData'].password = hashpassword
   const userSignup = await newUser.save()
 
   const payloadForJwt = {
     id: userSignup.id,
-    name: userSignup.name,
-    email: userSignup.email
+    name: userSignup['userRegisterData'].name,
+    email: userSignup['userRegisterData'].email
   }
 
   const jwtToken = await jwtTokenGen(payloadForJwt)
