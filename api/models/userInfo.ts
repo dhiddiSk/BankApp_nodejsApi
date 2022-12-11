@@ -2,7 +2,8 @@ import { Schema, model, connect } from 'mongoose';
 
 
 /*
-As per the requirement of the project, it is understood that embedded data modelling is most suitable for this project. 
+As per the requirement of the project, it is understood that embedded 
+data modelling is most suitable for this project. 
 */
 
 interface userRegistrationDoc{
