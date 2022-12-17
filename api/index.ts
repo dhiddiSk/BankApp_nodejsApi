@@ -13,7 +13,6 @@ mongoose.connect(process.env.mongoDatabaseURL!)
         .then(() => console.log('Database has been sucessfully connected'))
         .catch((error) => console.log(`Error while connecting to the database${error}`))
 
-
 // middleware
 application.use(passport.initialize())
 passportStrategy(passport)
